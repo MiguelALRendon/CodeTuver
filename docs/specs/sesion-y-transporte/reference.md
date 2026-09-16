@@ -28,8 +28,8 @@ Es la única capa que el resto del frontend usa para hablar con el proceso real 
 | `interruptSession` | `() => Promise<void>` | `interrupt_claude_session` | Interrumpe el turno en curso sin cerrar el proceso. |
 | `closeSession` | `() => Promise<void>` | `close_claude_session` | Cierra el proceso hijo. |
 | `onActivity` | `(handler: (activity: ClaudeActivity) => void) => Promise<UnlistenFn>` | escucha `claude-activity` | Línea cruda o línea inválida, sin normalizar. |
-| `onStderr` | `(handler: (line: string) => void) => Promise<UnlistenFn>` | escucha `claude-stderr` | Incluye errores no fatales (p.ej. fallo al escribir preferencias). |
-| `onSessionClosed` | `(handler: (closed: SessionClosed) => void) => Promise<UnlistenFn>` | escucha `session-closed` | Distingue cierre esperado de caída inesperada. |
+| `onStderr` | `(handler: (line: string) => void) => Promise<UnlistenFn>` | escucha `claude-stderr` | Incluye errores no fatales (p.ej. fallo al escribir preferencias). `App.vue` lo consume solo para guardar la última línea en `lastStderrLine` (variable de módulo, no reactiva) — contexto para el aviso de `onSessionClosed`, no se muestra cada línea por su cuenta. |
+| `onSessionClosed` | `(handler: (closed: SessionClosed) => void) => Promise<UnlistenFn>` | escucha `session-closed` | Distingue cierre esperado de caída inesperada. `App.vue` lo consume para mostrar un aviso cuando el cierre es inesperado con una sesión activa — ver `src/session-closed-notice.ts` abajo. |
 | `onNormalizedEvent` | `(handler: (event: NormalizedEvent) => void) => Promise<UnlistenFn>` | escucha `claude-normalized-event` | El canal principal que consume [chat-y-contenido](../chat-y-contenido/reference.md). |
 | `getLastSessionPreference` | `() => Promise<SessionPreference \| null>` | `get_last_session_preference` | `null` en el primer arranque de la app. |
 | `onPermissionPending` | `(handler: (request: InteractionRequest) => void) => Promise<UnlistenFn>` | escucha `permission-request-pending` | Ver [ui-compartida](../ui-compartida/overview.md). |
@@ -85,6 +85,14 @@ Todas las funciones son puras (mismo input, mismo output, sin efectos secundario
 |---|---|---|
 | `isSessionAlreadyActive` | `(err: unknown) => err is TransportError` | Type guard: `true` solo si `err` es objeto no nulo con `kind === 'session-already-active'`. |
 | `startSessionWithRetry` | `(attemptStart: () => Promise<void>, closeStaleSession: () => Promise<void>) => Promise<void>` | Intenta `attemptStart()`. Si falla con cualquier error que NO sea `session-already-active`, relanza el error tal cual. Si es `session-already-active`, llama `closeStaleSession()` y reintenta `attemptStart()` **una sola vez** — un segundo fallo se propaga sin más reintentos. |
+
+## `src/session-closed-notice.ts`
+
+Función pura, sin efectos secundarios — el wiring real (listeners, estado reactivo) vive en `App.vue`.
+
+| Función | Firma | Comportamiento |
+|---|---|---|
+| `buildUnexpectedCloseMessage` | `(closed: SessionClosed, lastStderrLine: string \| null) => string \| null` | `null` si `closed.expected` (cierre pedido por la persona, vía `closeActiveSession` — nada que avisar). Si no, arma un mensaje fijo ("La sesion de Claude Code se cerro inesperadamente..."); si hay `lastStderrLine` lo agrega tal cual como detalle (mayor prioridad — suele traer la razón real, p.ej. el CLI reportando falta de autenticación); si no hay stderr pero sí `exitCode`, agrega el código; sin ninguno de los dos, el mensaje genérico solo. |
 
 ## `src/session-hot-options.ts`
 

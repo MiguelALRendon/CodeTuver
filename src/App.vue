@@ -17,6 +17,8 @@ import {
   sendInstruction,
   onNormalizedEvent,
   onActivity,
+  onStderr,
+  onSessionClosed,
   onPermissionPending,
   respondToPermissionRequest,
   getLastSessionPreference,
@@ -25,6 +27,7 @@ import {
   type TransportError,
   type InteractionRequest,
 } from './claude-transport';
+import { buildUnexpectedCloseMessage } from './session-closed-notice';
 import { startSessionWithRetry } from './session-start-retry';
 import {
   listProjectFolders,
@@ -1320,6 +1323,10 @@ let unlistenActivity: (() => void) | null = null;
 let unlistenPermissionPending: (() => void) | null = null;
 let unlistenPetRestoreRequested: UnlistenFn | null = null;
 let unlistenPetSyncRequest: UnlistenFn | null = null;
+let unlistenStderr: (() => void) | null = null;
+let unlistenSessionClosed: (() => void) | null = null;
+// Contexto para el aviso de cierre inesperado (H: la sesion muere sin avisar, ej. sin "claude login") -- no es parte de la taxonomia de fallas por si sola, es best-effort igual que el resto del stderr.
+let lastStderrLine: string | null = null;
 
 function isClaudeCodeNotFound(err: unknown): err is TransportError {
   return (
@@ -1362,6 +1369,7 @@ async function beginSession(cwd: string) {
   const previousSessionId = sessionId.value;
   isStarting.value = true;
   startError.value = null;
+  lastStderrLine = null;
   sessionId.value = null;
   sessionActive.value = false;
   chosenCwd.value = cwd;
@@ -1403,6 +1411,7 @@ async function resumeSession(
   const previousSessionId = sessionId.value;
   isStarting.value = true;
   startError.value = null;
+  lastStderrLine = null;
   sessionId.value = null;
   sessionActive.value = false;
   chosenCwd.value = cwd;
@@ -1623,6 +1632,18 @@ onMounted(async () => {
       request,
     );
   });
+  unlistenStderr = await onStderr((line) => {
+    lastStderrLine = line;
+  });
+  unlistenSessionClosed = await onSessionClosed((closed) => {
+    if (!sessionActive.value) return;
+    const message = buildUnexpectedCloseMessage(closed, lastStderrLine);
+    if (!message) return;
+    sessionActive.value = false;
+    sessionId.value = null;
+    startError.value = message;
+    registerFailure('process-error', message);
+  });
   window.addEventListener('keydown', closeTopOverlayOnEscape);
   window.addEventListener('resize', onWindowResizeForChatColumn);
   nativeMenuHandle = await installNativeMenu(
@@ -1664,6 +1685,8 @@ onUnmounted(() => {
   unlistenNormalized?.();
   unlistenActivity?.();
   unlistenPermissionPending?.();
+  unlistenStderr?.();
+  unlistenSessionClosed?.();
   unlistenPetRestoreRequested?.();
   unlistenPetSyncRequest?.();
   window.removeEventListener('keydown', closeTopOverlayOnEscape);
