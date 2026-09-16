@@ -866,9 +866,23 @@ mod tests {
         let _ = std::fs::remove_dir_all(&dir);
     }
 
+    // Precondicion de entorno (no del codigo bajo prueba): CI publico no tiene Claude Code CLI instalado -- confirmado real solo cuando esta presente, se omite sin fallar cuando no.
+    fn require_claude_on_path() -> bool {
+        if resolve_claude_executable().is_some() {
+            return true;
+        }
+        eprintln!(
+            "[omitida] claude no esta en PATH de este entorno -- requiere Claude Code CLI real instalado"
+        );
+        false
+    }
+
     // Supuesto compartido con el resto de este archivo (ver ejecutable_presente_arranca_sin_producir_el_error_de_ausencia): la maquina de pruebas tiene claude.exe real instalado y en PATH.
     #[test]
     fn resolve_claude_executable_encuentra_el_ejecutable_real_de_este_entorno() {
+        if !require_claude_on_path() {
+            return;
+        }
         let resolved = resolve_claude_executable();
         assert!(
             resolved.as_ref().is_some_and(|path| path.is_file()),
@@ -931,6 +945,9 @@ mod tests {
 
     #[tokio::test]
     async fn iniciar_sesion_con_carpeta_de_trabajo_inexistente_no_arranca_el_proceso() {
+        if !require_claude_on_path() {
+            return;
+        }
         let mut slot: Option<ActiveSession> = None;
         let result = check_active_then_spawn(
             &mut slot,
