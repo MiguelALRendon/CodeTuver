@@ -89,7 +89,8 @@ interface UpdateCheckOutcome {
 ## Huecos reales vigentes hoy
 
 - 7 de las 12 clases de falla no tienen ningún sitio de captura real en producción (solo alcanzables por inyección de DebugPanel) — ver tabla arriba.
-- El endpoint del actualizador ya apunta al repositorio real, pero el ciclo completo de detectar/descargar/instalar una release real (incluidas las release notes) nunca se ha ejercitado contra una release publicada de verdad.
+- El endpoint del actualizador ya sirve un `latest.json` real (verificado en vivo contra `v0.1.0`, primer release publicado) — pendiente todavía: ejercitar el ciclo completo de descarga + instalación silenciosa + `relaunch()` contra una versión `v0.2.0` real que exista de verdad, no solo la resolución del manifiesto.
+- La llave de firma del updater (`.tauri-updater-keys/`) se regeneró para `v0.1.0` **sin contraseña** — decisión deliberada: nadie dependía todavía de la llave anterior (perdida, nunca hubo un release firmado con ella) y una llave sin contraseña evita que el flujo de build quede atado a una entrada interactiva que no tiene dónde vivir en un pipeline no interactivo. El archivo sigue fuera de git (`.gitignore`) y es el único punto de fallo real: perderlo de nuevo obliga a repetir este mismo proceso para la próxima release.
 - Sin firma Authenticode: cualquier instalación real dispara la advertencia de SmartScreen.
 
 ## Referencias cruzadas
