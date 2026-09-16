@@ -25,6 +25,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+      # Precondicion real de este dominio (README/CLAUDE.md): claude_transport.rs y claude_admin.rs
+      # spawnean el binario real de Claude Code -- sin el, esas pruebas no verifican nada.
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy

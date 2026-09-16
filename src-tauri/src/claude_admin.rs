@@ -504,17 +504,6 @@ pub fn read_admin_settings<R: Runtime>(
 mod tests {
     use super::*;
 
-    // Precondicion de entorno (no del codigo bajo prueba): CI publico no tiene Claude Code CLI instalado -- confirmado real solo cuando esta presente, se omite sin fallar cuando no.
-    fn require_claude_on_path() -> bool {
-        if resolve_claude_executable().is_some() {
-            return true;
-        }
-        eprintln!(
-            "[omitida] claude no esta en PATH de este entorno -- requiere Claude Code CLI real instalado"
-        );
-        false
-    }
-
     #[tokio::test]
     async fn run_claude_con_cwd_inexistente_falla_por_directorio_no_por_ejecutable_ausente() {
         let result = run_claude(
@@ -531,9 +520,6 @@ mod tests {
 
     #[tokio::test]
     async fn run_claude_sin_cwd_no_intenta_cambiar_de_directorio() {
-        if !require_claude_on_path() {
-            return;
-        }
         let result = run_claude(&["--version"], None).await;
 
         assert!(
@@ -596,9 +582,6 @@ mod tests {
     // authenticate_mcp no espera a que el login termine (es interactivo, ver spawn_claude_detached): con un nombre inexistente el spawn en si mismo debe reportar exito igual, aunque el CLI real termine reportando un McpLoginOutcome::FailedEarly.
     #[tokio::test]
     async fn authenticate_mcp_confirma_el_spawn_incluso_con_nombre_inexistente() {
-        if !require_claude_on_path() {
-            return;
-        }
         let result = authenticate_mcp(NOMBRE_MCP_INEXISTENTE.to_string()).await;
 
         assert!(
