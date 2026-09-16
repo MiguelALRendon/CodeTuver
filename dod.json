@@ -1,0 +1,10 @@
+{
+  "gates": [
+    { "id": "gauntlet", "required": true, "check": "gauntlet --local", "blocking": "hard" },
+    { "id": "tasks", "required": true, "check": "tasks-complete", "blocking": "hard" },
+    { "id": "evidence", "required": false, "goal": "transcript shows 'gauntlet OK' and audit verdicts" },
+    { "id": "semantic-verify", "required": false, "agent": "fresh-verifier", "when": "nontrivial" }
+  ],
+  "maxBlocks": 8,
+  "onExhausted": "handoff-report"
+}

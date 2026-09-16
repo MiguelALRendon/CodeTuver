@@ -1,0 +1,39 @@
+name: quality-gate
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+
+jobs:
+  gauntlet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+      - name: Install
+        run: npm ci
+      - name: Build (type-check)
+        run: npx tsc --noEmit
+      - name: Format
+        run: npx prettier --check .
+      - name: Test
+        run: npx vitest run --coverage
+
+  rust-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - name: Cargo check
+        working-directory: src-tauri
+        run: cargo check --locked
+      - name: Clippy
+        working-directory: src-tauri
+        run: cargo clippy --locked -- -D warnings
+      - name: Test
+        working-directory: src-tauri
+        run: cargo test --locked

@@ -1,0 +1,2 @@
+{"type": "system", "subtype": "hook_started", "hook_id": "30aa90ed-4106-4047-b337-82e967ade3c6", "hook_name": "SessionStart:startup", "hook_event": "SessionStart", "uuid": "<anonimizado>", "session_id": "<anonimizado>"}
+Error parsing streaming input line: esto no es json valido {{{: SyntaxError: JSON Parse error: Unexpected identifier "esto"

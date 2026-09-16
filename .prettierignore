@@ -1,0 +1,14 @@
+docs/
+specs/
+flujo_projects/
+*.md
+LICENSE
+.claude/settings.json
+.github/workflows/quality-gate.yml
+dod.json
+flujo.json
+gauntlet.json
+vitest.config.ts
+src-tauri/gen/
+.impeccable/
+reports/

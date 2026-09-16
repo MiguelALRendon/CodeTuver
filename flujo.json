@@ -1,0 +1,38 @@
+{
+  "codeExtensions": [".css", ".scss", ".sql", ".ps1", ".js", ".ts", ".jsx", ".tsx", ".vue", ".rs"],
+  "specGuard": {
+    "enabled": true,
+    "requirePaths": ["src/**", "src-tauri/src/**"],
+    "exemptPaths": ["tests/**", "docs/**", "scripts/**", "scratch/**", "specs/**", "flujo_projects/**", "**/*.md", "**/*.feature", "**/*.spec.ts"],
+    "exemptModes": ["spike", "explore", "bugfix", "chore", "implement"],
+    "nonEditingModes": ["plan", "document", "review"]
+  },
+  "testing": {
+    "enabled": true,
+    "bdd": true,
+    "project": "src/**/*.spec.ts",
+    "coverage": "changed",
+    "exemptions": [
+      "accesores-simples",
+      "contenedores-de-datos",
+      "constructores-triviales",
+      "catalogos-repetidos",
+      "mapeos-1a1",
+      "autogenerado",
+      "cableado-configuracion",
+      "presentacion-ui"
+    ]
+  },
+  "style": {
+    "enabled": true,
+    "themeSource": "src/assets/styles/constants.css",
+    "vendorExempt": [],
+    "exemptions": ["0", "porcentajes", "viewport", "grid-fr", "keywords"]
+  },
+  "models": {
+    "plan": "opus",
+    "code": "sonnet",
+    "audit": "haiku",
+    "quick": "haiku"
+  }
+}

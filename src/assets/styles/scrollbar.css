@@ -1,0 +1,22 @@
+/* Global, sin wrapper por zona de scroll (D3, revision-ux-sesion-real-3 H3): casi invisible en reposo, engrosa al pasar el puntero, sin salto de layout. */
+*::-webkit-scrollbar {
+  width: var(--size-scrollbar-track);
+  height: var(--size-scrollbar-track);
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-border-strong);
+  background-clip: padding-box;
+  border: var(--size-scrollbar-thumb-inset) solid transparent;
+  border-radius: var(--radius-lg);
+  transition: border-width var(--duration-fast) var(--ease-standard);
+}
+
+/* Hover del pulgar mismo, no del contenedor (D3, correccion 2026-09-06): *:hover::-webkit-scrollbar-thumb dependia de que el hover del contenedor siguiera activo mientras el puntero esta sobre la barra nativa, y en Chromium/WebView2 eso no se sostiene de forma confiable -- se quedaba engrosado tras quitar el mouse. El pseudo-elemento del pulgar tiene su propio :hover real. */
+*::-webkit-scrollbar-thumb:hover {
+  border-width: 0;
+}

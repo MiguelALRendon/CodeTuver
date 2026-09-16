@@ -1,0 +1,54 @@
+﻿{
+    "generatedAt":  "2026-09-06T00:06:38.5581587-06:00",
+    "totalFilesScanned":  73,
+    "findings":  {
+                     "fallback_datos_viejos":  [
+                                                   "src/components/PetView.vue:31: resolveActiveCharacter(CHARACTER_CATALOG, loadPersistedCharacterId())?.id ??",
+                                                   "src/App.vue:368: resolveActiveCharacter(CHARACTER_CATALOG, loadPersistedCharacterId())?.id ??",
+                                                   "src/character-editor.ts:232: const settings = persisted ?? defaultCharacterEditorSettings(capabilities);",
+                                                   "src/character-selection.ts:25: return persisted ?? catalog[0];"
+                                               ],
+                     "error_no_normalizado":  [
+                                                  "src/avatar-controller.ts:111: const message = error instanceof Error ? error.message : String(error);",
+                                                  "src/content-interpreter.ts:213: error instanceof Error ? error.message : String(error),",
+                                                  "src/desktop-window-manager.ts:105: return error instanceof Error ? error.message : String(error);",
+                                                  "src/error-message.ts:9: return serialized === undefined ? String(err) : serialized;",
+                                                  "src/error-message.ts:11: return String(err);",
+                                                  "src/reaction-engine.ts:155: const message = err instanceof Error ? err.message : String(err);"
+                                              ],
+                     "listas_sin_dedup":  [
+                                              "src/activity-console.ts:27: return { ...state, blocks: [...state.blocks, ...blocks] };",
+                                              "src/activity-console.ts:100: const stale = [...state.pendingToolIndices, ...state.pendingCommandIndices];",
+                                              "src/attention-signal-settings.ts:37: return { ...DEFAULT_STORED_SETTINGS, ...JSON.parse(raw) };",
+                                              "src/chat.ts:49: blocks: [...sweptConsole.blocks, ...trailingBlocks],",
+                                              "src/chat.ts:82: blocks: [...turn.console.blocks, ...pushResult.completedBlocks],",
+                                              "src/content-block-text.ts:6: return [...additions, ...deletions].join(\u0027\\n\u0027);",
+                                              "src/interaction-requests.ts:105: return [...pending, ...resolved];"
+                                          ],
+                     "guardia_sin_salida":  [
+                                                "src/App.vue:747: function isSessionAlreadyActive(err: unknown): err is TransportError {",
+                                                "src/App.vue:778: startErrorIsStaleSession.value = isSessionAlreadyActive(err);",
+                                                "src/App.vue:789: // \"ya hay una sesion activa\" puede ser un guardia de proceso huerfano (sin valor real) O una sesion real interrumpida (con historial en juego) â€” ofrecemos ambas salidas, no asumimos cual es.",
+                                                "src-tauri/src/claude_transport.rs:51: SessionAlreadyActive,",
+                                                "src-tauri/src/claude_transport.rs:388: TransportErrorKind::SessionAlreadyActive,",
+                                                "src-tauri/src/claude_transport.rs:389: \"ya hay una sesion activa\",",
+                                                "src-tauri/src/claude_transport.rs:639: kind: TransportErrorKind::SessionAlreadyActive,"
+                                            ],
+                     "estado_intermedio":  [
+                                               "src/interaction-requests.ts:21: | { status: \u0027pending\u0027; requestId: string; request: InteractionRequest }",
+                                               "src/interaction-requests.ts:95: status: \u0027pending\u0027 as const,"
+                                           ],
+                     "vocabulario_manual":  [
+                                                "src/components/PetView.vue: comparacion de igualdad contra \u0027state\u0027 - confirmar a mano que emisor y consumidor comparten el mismo vocabulario cerrado",
+                                                "src/App.vue: comparacion de igualdad contra \u0027state\u0027 - confirmar a mano que emisor y consumidor comparten el mismo vocabulario cerrado",
+                                                "src/character-editor.ts: comparacion de igualdad contra \u0027state\u0027 - confirmar a mano que emisor y consumidor comparten el mismo vocabulario cerrado",
+                                                "src/character-selection.ts: comparacion de igualdad contra \u0027state\u0027 - confirmar a mano que emisor y consumidor comparten el mismo vocabulario cerrado"
+                                            ],
+                     "roundtrip_manual":  [
+                                              "src/animation-import.ts: nombre sugiere una mitad de un roundtrip - confirmar que se probo el ciclo completo, no solo esta mitad",
+                                              "src/character-import.ts: nombre sugiere una mitad de un roundtrip - confirmar que se probo el ciclo completo, no solo esta mitad",
+                                              "src/vrma-animation-export.ts: nombre sugiere una mitad de un roundtrip - confirmar que se probo el ciclo completo, no solo esta mitad",
+                                              "src/vrma-pose-export.ts: nombre sugiere una mitad de un roundtrip - confirmar que se probo el ciclo completo, no solo esta mitad"
+                                          ]
+                 }
+}

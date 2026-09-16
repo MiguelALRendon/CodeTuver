@@ -1,0 +1,59 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Codetuver Avatar",
+  "version": "0.1.0",
+  "identifier": "com.codetuver.avatar",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Codetuver Avatar",
+        "width": 1024,
+        "height": 700,
+        "minWidth": 1024,
+        "minHeight": 700,
+        "maximized": true,
+        "transparent": true,
+        "windowEffects": {
+          "effects": ["micaDark"]
+        }
+      }
+    ],
+    "security": {
+      "csp": null,
+      "assetProtocol": {
+        "enable": true,
+        "scope": ["$APPDATA/imported-characters/**"]
+      }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "createUpdaterArtifacts": true,
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": {
+      "../docs/reference/licencias-y-atribuciones.md": "licencias-y-atribuciones.md"
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDE3REI4MUJFRUEwRTU5NTEKUldSUldRN3F2b0hiRngxRUFVaEJ6djdNZGZCb0syTkRRYzg3c1FpMjNzSjZEbnNpdENKVmRuZGwK",
+      "endpoints": [
+        "https://github.com/MiguelALRendon/CodeTuver/releases/latest/download/latest.json"
+      ]
+    }
+  }
+}

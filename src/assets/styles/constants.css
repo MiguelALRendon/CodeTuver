@@ -1,0 +1,98 @@
+:root {
+  --color-primary-rgb: 217 119 87;
+  --color-accent-primary: rgb(var(--color-primary-rgb));
+  --color-chat-bubble: rgb(var(--color-primary-rgb) / 0.75);
+  --color-surface-base: oklch(0.1 0 0 / 0.05);
+  --color-surface-raised: oklch(0.14 0 0 / 0.17);
+  --color-surface-overlay: oklch(0.12 0 0 / 0.3);
+  --blur-panel: 32px;
+  --blur-chat: 36px;
+  /* Mismo valor que --color-surface-base antes de Hito 18, pero opaco a proposito: texto oscuro sobre fondos de acento no puede heredar la alfa que ahora lleva ese token. */
+  --color-text-on-accent: oklch(0.16 0 0);
+  --color-text-primary: oklch(0.96 0 0);
+  --color-text-secondary: oklch(0.78 0 0);
+  --color-text-muted: oklch(0.63 0 0);
+  --color-accent-secondary: oklch(0.8 0 0);
+  --color-success: oklch(0.75 0.17 155);
+  --color-error: oklch(0.65 0.22 25);
+  --color-warning: oklch(0.8 0.18 80);
+  --color-border-subtle: oklch(0.85 0 0 / 0.16);
+  --color-border-strong: oklch(0.85 0 0 / 0.35);
+  --color-overlay-scrim: oklch(0.1 0 0 / 0.6);
+  accent-color: var(--color-accent-primary);
+
+  --font-display: "Rajdhani", system-ui, sans-serif;
+  --font-sans: "Sora", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", ui-monospace, monospace;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+
+  --border-width-thin: 1px;
+  --border-width-thick: 2px;
+
+  --shadow-md: 0 4px 16px oklch(0 0 0 / 0.24);
+  --shadow-glow-accent: 0 0 24px rgb(var(--color-primary-rgb) / 0.35);
+
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --z-panel: 10;
+  --z-overlay: 20;
+  --z-toast: 30;
+
+  --size-chat-column: 22rem;
+  --size-overlay-panel: min(28rem, 90vw);
+  --size-overlay-panel-large: min(96rem, 92vw);
+  --size-overlay-panel-large-height: 88vh;
+
+  --color-poc-avatar: var(--color-accent-primary);
+  --color-poc-avatar-alt: var(--color-accent-secondary);
+  --color-poc-panel-bg: var(--color-surface-overlay);
+  --color-poc-panel-border: var(--color-border-strong);
+  --color-poc-text: var(--color-text-primary);
+  --size-poc-avatar: 8rem;
+  --aspect-vrm-canvas: 3 / 4;
+  --size-dopesheet-label-column: 9rem;
+  --size-dopesheet-side-panel: 16rem;
+  --size-chip-label-max: 12rem;
+  --size-select-trigger-min: 8rem;
+  --size-icon-md: 1.25rem;
+  --size-icon-sm: 0.875rem;
+  --size-floating-button: 2.5rem;
+  --size-scrollbar-track: 10px;
+  --size-scrollbar-thumb-inset: 3px;
+  --space-poc-gap: var(--space-2);
+  --space-poc-padding: var(--space-2);
+  --radius-poc-panel: var(--radius-md);
+  --border-width-poc: var(--border-width-thin);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}

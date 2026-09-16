@@ -1,0 +1,73 @@
+.session-panel__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.session-panel__folder {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.session-panel__button {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  border: var(--border-width-thin) solid var(--color-border-subtle);
+  background: var(--color-surface-raised);
+  backdrop-filter: blur(var(--blur-panel));
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-standard);
+}
+
+.session-panel__button:hover:not(:disabled) {
+  background: var(--color-accent-primary);
+  color: var(--color-text-on-accent);
+}
+
+.session-panel__button:disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.session-panel__button--active:disabled {
+  background: var(--color-surface-raised);
+}
+
+.session-panel__button--active {
+  background: var(--color-accent-primary);
+  color: var(--color-text-on-accent);
+  font-weight: var(--font-weight-bold);
+  text-decoration: underline;
+}
+
+.session-panel__button--danger {
+  border-color: var(--color-error);
+}
+
+.session-panel__button--danger:hover:not(:disabled) {
+  background: var(--color-error);
+  color: var(--color-text-on-accent);
+}
+
+.session-panel__error,
+.session-panel__notice {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+}
+
+.session-panel__error {
+  color: var(--color-error);
+}
+
+.session-panel__notice {
+  color: var(--color-warning);
+}

@@ -1,0 +1,13 @@
+# Peticiones de interacción pendientes sobreviven al cierre de sesión y se arrastran a la sesión nueva
+
+**Caso general que se estaba revisando:** Verificación en vivo del Hito 3 de `lanzamiento-publico` (`window.__qaInjectPermissionPending`, AC-1.2) — surgió al ejercitar el caso adversarial "cierre de sesión con petición pendiente" del guantelete del hito.
+**Prueba específica armada:** Contra la app real (CDP):
+1. Con una sesión activa, inyectar 4 peticiones de permiso pendientes (`__qaInjectPermissionPending`, mismo camino real que `onPermissionPending`).
+2. Cerrar la sesión (`__qaCloseSessionFromMenu`, equivalente real al menú nativo "Cerrar sesión") sin responder ninguna.
+3. Iniciar una sesión **completamente nueva** (`__qaBeginSession`, mismo camino del botón "Iniciar sesión").
+4. Revisar `interactionRequestsState` sin haber inyectado ni recibido ninguna petición nueva.
+**Qué tronó:** Las 4 peticiones pendientes y las 2 ya resueltas de la sesión anterior siguen apareciendo en la sesión nueva (`pendingRequests.pending` con las mismas 4 claves, `pendingRequests.resolved` con las mismas 2). La sección "Peticiones de interacción" de la UI las seguiría mostrando indefinidamente.
+**Cómo tronó:** `interactionRequestsState` (`App.vue:922`) nunca se reinicia en `beginSession`/`closeSession`/`closeActiveSession` — mismo patrón de la causa raíz ya corregida en `correcciones-qa-gauntlet` Hito 7 (`chatState`/`activityConsole`), pero esa corrección no tocó `interactionRequestsState`. Si la petición pendiente era una `permission` real, además queda **irresoluble para siempre**: el backend (`PendingRequestsState`, Rust) es un mapa en memoria por sesión — al cerrar la sesión su proceso termina, y una sesión nueva arranca con el mapa vacío, así que aceptar/rechazar la petición vieja desde la UI nueva fallaría con `RequestNotPending`.
+**Resultado obtenido:** `pendingRequests.pending` con 4 entradas y `pendingRequests.resolved` con 2, medido inmediatamente después de que `sessionActive` pasara a `true` para la sesión nueva, sin ninguna petición nueva de por medio.
+**Evidencia:** Ejecución en vivo vía CDP contra la ventana Tauri real (`docs/reference/qa-evidencia/qa141-lp-h3-angulo-cierre-con-peticion-pendiente.png`) + confirmación directa contra el código fuente (`App.vue`, sin ninguna línea que toque `interactionRequestsState` en `beginSession`/`closeSession`/`closeActiveSession`).
+**¿Bloquea el Hito 3 de `lanzamiento-publico`?:** No — Hito 3 solo agrega el hook de inyección para QA (D3 de `design.md`), no audita el ciclo de vida de `interactionRequestsState`. Este hallazgo queda **fuera de alcance de ese hito**, registrado aquí para triage futuro (no tiene hito propio en ningún plan activo a la fecha de este hallazgo).

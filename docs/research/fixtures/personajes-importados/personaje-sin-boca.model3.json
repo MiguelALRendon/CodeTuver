@@ -1,0 +1,9 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "personaje-sin-boca.moc3",
+    "Textures": [
+      "personaje-sin-boca.2048/texture_00.png"
+    ]
+  }
+}
